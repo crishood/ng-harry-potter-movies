@@ -1,0 +1,9 @@
+<div class="container">
+  @for (movie of movies(); track movie.id) {
+    <app-movie-item
+      [movie]="movie"
+      [isFavorite]="isFavorite(movie)()"
+      appHighlight
+    />
+  }
+</div>

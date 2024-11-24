@@ -10,8 +10,8 @@ const handlers = [
       'e80d5a37-620e-4be2-92b9-fb1f5262494f': {
         id: 'e80d5a37-620e-4be2-92b9-fb1f5262494f',
         title: "Harry Potter and the Philosopher's Stone",
-        duration: '152',
-        budget: '125',
+        duration: '153',
+        budget: '130',
         release_date: '2001-11-04',
         box_office: '1.018',
         cinematographers: ['John Seale'],
