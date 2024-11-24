@@ -1,5 +1,14 @@
 <div class="container">
-  @for (movie of movies(); track movie.id) {
+  <form [formGroup]="form">
+    <fieldset>
+      <legend>Filters</legend>
+      <label for="title">Title</label>
+      <input type="text" name="title" formControlName="title" />
+      <label for="releaseDate">Release year</label>
+      <input type="number" name="releaseDate" formControlName="releaseYear" />
+    </fieldset>
+  </form>
+  @for (movie of filteredMovies(); track movie.id) {
     <app-movie-item
       [movie]="movie"
       [isFavorite]="isFavorite(movie)()"
