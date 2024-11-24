@@ -12,9 +12,9 @@ import {
   inject,
   signal,
   takeUntil,
-  untracked
-} from "./chunk-MOBG5W6T.js";
-import "./chunk-J4B6MK7R.js";
+  untracked,
+} from './chunk-MOBG5W6T.js';
+import './chunk-J4B6MK7R.js';
 
 // node_modules/@angular/core/fesm2022/rxjs-interop.mjs
 function takeUntilDestroyed(destroyRef) {
@@ -41,13 +41,19 @@ var OutputFromObservableRef = class {
   }
   subscribe(callbackFn) {
     if (this.destroyed) {
-      throw new RuntimeError(953, ngDevMode && "Unexpected subscription to destroyed `OutputRef`. The owning directive/component is destroyed.");
+      throw new RuntimeError(
+        953,
+        ngDevMode &&
+          'Unexpected subscription to destroyed `OutputRef`. The owning directive/component is destroyed.'
+      );
     }
-    const subscription = this.source.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (value) => callbackFn(value)
-    });
+    const subscription = this.source
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => callbackFn(value),
+      });
     return {
-      unsubscribe: () => subscription.unsubscribe()
+      unsubscribe: () => subscription.unsubscribe(),
     };
   }
 };
@@ -67,16 +73,19 @@ function toObservable(source, options) {
   !options?.injector && assertInInjectionContext(toObservable);
   const injector = options?.injector ?? inject(Injector);
   const subject = new ReplaySubject(1);
-  const watcher = effect(() => {
-    let value;
-    try {
-      value = source();
-    } catch (err) {
-      untracked(() => subject.error(err));
-      return;
-    }
-    untracked(() => subject.next(value));
-  }, { injector, manualCleanup: true });
+  const watcher = effect(
+    () => {
+      let value;
+      try {
+        value = source();
+      } catch (err) {
+        untracked(() => subject.error(err));
+        return;
+      }
+      untracked(() => subject.next(value));
+    },
+    { injector, manualCleanup: true }
+  );
   injector.get(DestroyRef).onDestroy(() => {
     watcher.destroy();
     subject.complete();
@@ -84,14 +93,20 @@ function toObservable(source, options) {
   return subject.asObservable();
 }
 function toSignal(source, options) {
-  ngDevMode && assertNotInReactiveContext(toSignal, "Invoking `toSignal` causes new subscriptions every time. Consider moving `toSignal` outside of the reactive context and read the signal value where needed.");
+  ngDevMode &&
+    assertNotInReactiveContext(
+      toSignal,
+      'Invoking `toSignal` causes new subscriptions every time. Consider moving `toSignal` outside of the reactive context and read the signal value where needed.'
+    );
   const requiresCleanup = !options?.manualCleanup;
   requiresCleanup && !options?.injector && assertInInjectionContext(toSignal);
-  const cleanupRef = requiresCleanup ? options?.injector?.get(DestroyRef) ?? inject(DestroyRef) : null;
+  const cleanupRef = requiresCleanup
+    ? (options?.injector?.get(DestroyRef) ?? inject(DestroyRef))
+    : null;
   let state;
   if (options?.requireSync) {
     state = signal({
-      kind: 0
+      kind: 0,
       /* StateKind.NoValue */
     });
   } else {
@@ -104,12 +119,15 @@ function toSignal(source, options) {
         throw error;
       }
       state.set({ kind: 2, error });
-    }
+    },
     // Completion of the Observable is meaningless to the signal. Signals don't have a concept of
     // "complete".
   });
   if (ngDevMode && options?.requireSync && state().kind === 0) {
-    throw new RuntimeError(601, "`toSignal()` called with `requireSync` but `Observable` did not emit synchronously.");
+    throw new RuntimeError(
+      601,
+      '`toSignal()` called with `requireSync` but `Observable` did not emit synchronously.'
+    );
   }
   cleanupRef?.onDestroy(sub.unsubscribe.bind(sub));
   return computed(() => {
@@ -120,7 +138,10 @@ function toSignal(source, options) {
       case 2:
         throw current.error;
       case 0:
-        throw new RuntimeError(601, "`toSignal()` called with `requireSync` but `Observable` did not emit synchronously.");
+        throw new RuntimeError(
+          601,
+          '`toSignal()` called with `requireSync` but `Observable` did not emit synchronously.'
+        );
     }
   });
 }
@@ -129,7 +150,7 @@ export {
   outputToObservable,
   takeUntilDestroyed,
   toObservable,
-  toSignal
+  toSignal,
 };
 /*! Bundled license information:
 

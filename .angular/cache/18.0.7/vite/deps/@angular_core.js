@@ -462,9 +462,9 @@ import {
   ɵɵtwoWayProperty,
   ɵɵvalidateIframeAttribute,
   ɵɵviewQuery,
-  ɵɵviewQuerySignal
-} from "./chunk-MOBG5W6T.js";
-import "./chunk-J4B6MK7R.js";
+  ɵɵviewQuerySignal,
+} from './chunk-MOBG5W6T.js';
+import './chunk-J4B6MK7R.js';
 export {
   ANIMATION_MODULE_TYPE,
   APP_BOOTSTRAP_LISTENER,
@@ -931,6 +931,6 @@ export {
   ɵɵtwoWayProperty,
   ɵɵvalidateIframeAttribute,
   ɵɵviewQuery,
-  ɵɵviewQuerySignal
+  ɵɵviewQuerySignal,
 };
 //# sourceMappingURL=@angular_core.js.map

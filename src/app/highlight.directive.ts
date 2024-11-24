@@ -1,11 +1,10 @@
-import { Directive,  HostBinding,  HostListener,  } from '@angular/core';
+import { Directive, HostBinding, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appHighlight]',
-  standalone: true
+  standalone: true,
 })
 export class HighlightDirective {
-
   @HostBinding('class')
   myClass = '';
   @HostListener('mouseenter') onMouseEnter() {
@@ -14,5 +13,4 @@ export class HighlightDirective {
   @HostListener('mouseleave') onMouseLeave() {
     this.myClass = '';
   }
-
 }

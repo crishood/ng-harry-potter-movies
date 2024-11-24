@@ -1,5 +1,10 @@
 <div class="container">
   @for(movie of movies(); track movie.id) {
-    <app-movie-item [movie]="movie" [isFavorite]="isFavorite(movie)()" (click)="setFavorite(movie)"  appHighlight />
+  <app-movie-item
+    [movie]="movie"
+    [isFavorite]="isFavorite(movie)()"
+    (click)="setFavorite(movie)"
+    appHighlight
+  />
   }
 </div>

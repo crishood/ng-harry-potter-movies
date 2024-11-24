@@ -2,26 +2,26 @@ import {
   __async,
   __objRest,
   __spreadProps,
-  __spreadValues
-} from "./chunk-J4B6MK7R.js";
+  __spreadValues,
+} from './chunk-J4B6MK7R.js';
 
 // node_modules/outvariant/lib/index.mjs
 var POSITIONALS_EXP = /(%?)(%([sdijo]))/g;
 function serializePositional(positional, flag) {
   switch (flag) {
-    case "s":
+    case 's':
       return positional;
-    case "d":
-    case "i":
+    case 'd':
+    case 'i':
       return Number(positional);
-    case "j":
+    case 'j':
       return JSON.stringify(positional);
-    case "o": {
-      if (typeof positional === "string") {
+    case 'o': {
+      if (typeof positional === 'string') {
         return positional;
       }
       const json = JSON.stringify(positional);
-      if (json === "{}" || json === "[]" || /^\[object .+?\]$/.test(json)) {
+      if (json === '{}' || json === '[]' || /^\[object .+?\]$/.test(json)) {
         return positional;
       }
       return json;
@@ -46,9 +46,9 @@ function format(message, ...positionals) {
     }
   );
   if (positionalIndex < positionals.length) {
-    formattedMessage += ` ${positionals.slice(positionalIndex).join(" ")}`;
+    formattedMessage += ` ${positionals.slice(positionalIndex).join(' ')}`;
   }
-  formattedMessage = formattedMessage.replace(/%{2,2}/g, "%");
+  formattedMessage = formattedMessage.replace(/%{2,2}/g, '%');
   return formattedMessage;
 }
 var STACK_FRAMES_TO_IGNORE = 2;
@@ -56,15 +56,15 @@ function cleanErrorStack(error2) {
   if (!error2.stack) {
     return;
   }
-  const nextStack = error2.stack.split("\n");
+  const nextStack = error2.stack.split('\n');
   nextStack.splice(1, STACK_FRAMES_TO_IGNORE);
-  error2.stack = nextStack.join("\n");
+  error2.stack = nextStack.join('\n');
 }
 var InvariantError = class extends Error {
   constructor(message, ...positionals) {
     super(message);
     this.message = message;
-    this.name = "Invariant Violation";
+    this.name = 'Invariant Violation';
     this.message = format(message, ...positionals);
     cleanErrorStack(this);
   }
@@ -76,12 +76,11 @@ var invariant = (predicate, message, ...positionals) => {
 };
 invariant.as = (ErrorConstructor, predicate, message, ...positionals) => {
   if (!predicate) {
-    const formatMessage2 = positionals.length === 0 ? message : format(message, ...positionals);
+    const formatMessage2 =
+      positionals.length === 0 ? message : format(message, ...positionals);
     let error2;
     try {
-      error2 = Reflect.construct(ErrorConstructor, [
-        formatMessage2
-      ]);
+      error2 = Reflect.construct(ErrorConstructor, [formatMessage2]);
     } catch (err) {
       error2 = ErrorConstructor(formatMessage2);
     }
@@ -90,7 +89,7 @@ invariant.as = (ErrorConstructor, predicate, message, ...positionals) => {
 };
 
 // node_modules/msw/lib/core/utils/internal/devUtils.mjs
-var LIBRARY_PREFIX = "[MSW]";
+var LIBRARY_PREFIX = '[MSW]';
 function formatMessage(message, ...positionals) {
   const interpolatedMessage = format(message, ...positionals);
   return `${LIBRARY_PREFIX} ${interpolatedMessage}`;
@@ -104,12 +103,12 @@ function error(message, ...positionals) {
 var devUtils = {
   formatMessage,
   warn,
-  error
+  error,
 };
 var InternalError = class extends Error {
   constructor(message) {
     super(message);
-    this.name = "InternalError";
+    this.name = 'InternalError';
   }
 };
 
@@ -122,7 +121,7 @@ var MemoryLeakError = class extends Error {
     this.emitter = emitter;
     this.type = type;
     this.count = count;
-    this.name = "MaxListenersExceededWarning";
+    this.name = 'MaxListenersExceededWarning';
   }
 };
 var _Emitter = class {
@@ -135,10 +134,7 @@ var _Emitter = class {
     this.hasWarnedAboutPotentialMemoryLeak = false;
   }
   _emitInternalEvent(internalEventName, eventName, listener) {
-    this.emit(
-      internalEventName,
-      ...[eventName, listener]
-    );
+    this.emit(internalEventName, ...[eventName, listener]);
   }
   _getListeners(eventName) {
     return Array.prototype.concat.apply([], this.events.get(eventName)) || [];
@@ -155,7 +151,7 @@ var _Emitter = class {
       this.removeListener(eventName, onceListener);
       return listener.apply(this, data);
     };
-    Object.defineProperty(onceListener, "name", { value: listener.name });
+    Object.defineProperty(onceListener, 'name', { value: listener.name });
     return onceListener;
   }
   setMaxListeners(maxListeners) {
@@ -194,10 +190,14 @@ var _Emitter = class {
     return listeners.length > 0;
   }
   addListener(eventName, listener) {
-    this._emitInternalEvent("newListener", eventName, listener);
+    this._emitInternalEvent('newListener', eventName, listener);
     const nextListeners = this._getListeners(eventName).concat(listener);
     this.events.set(eventName, nextListeners);
-    if (this.maxListeners > 0 && this.listenerCount(eventName) > this.maxListeners && !this.hasWarnedAboutPotentialMemoryLeak) {
+    if (
+      this.maxListeners > 0 &&
+      this.listenerCount(eventName) > this.maxListeners &&
+      !this.hasWarnedAboutPotentialMemoryLeak
+    ) {
       this.hasWarnedAboutPotentialMemoryLeak = true;
       const memoryLeakWarning = new MemoryLeakError(
         this,
@@ -238,7 +238,7 @@ var _Emitter = class {
     if (listeners.length > 0) {
       this._removeListener(listeners, listener);
       this.events.set(eventName, listeners);
-      this._emitInternalEvent("removeListener", eventName, listener);
+      this._emitInternalEvent('removeListener', eventName, listener);
     }
     return this;
   }
@@ -304,7 +304,7 @@ var Disposable = class {
   subscriptions = [];
   dispose() {
     let subscription;
-    while (subscription = this.subscriptions.shift()) {
+    while ((subscription = this.subscriptions.shift())) {
       subscription();
     }
   }
@@ -321,7 +321,8 @@ var InMemoryHandlersController = class {
     this.handlers.unshift(...runtimeHandles);
   }
   reset(nextHandlers) {
-    this.handlers = nextHandlers.length > 0 ? [...nextHandlers] : [...this.initialHandlers];
+    this.handlers =
+      nextHandlers.length > 0 ? [...nextHandlers] : [...this.initialHandlers];
   }
   currentHandlers() {
     return this.handlers;
@@ -383,27 +384,30 @@ var SetupApi = class extends Disposable {
       },
       removeAllListeners: (...args) => {
         return this.publicEmitter.removeAllListeners(...args);
-      }
+      },
     };
   }
 };
 
 // node_modules/msw/lib/core/utils/internal/getCallFrame.mjs
 var SOURCE_FRAME = /[\/\\]msw[\/\\]src[\/\\](.+)/;
-var BUILD_FRAME = /(node_modules)?[\/\\]lib[\/\\](core|browser|node|native|iife)[\/\\]|^[^\/\\]*$/;
+var BUILD_FRAME =
+  /(node_modules)?[\/\\]lib[\/\\](core|browser|node|native|iife)[\/\\]|^[^\/\\]*$/;
 function getCallFrame(error2) {
   const stack = error2.stack;
   if (!stack) {
     return;
   }
-  const frames = stack.split("\n").slice(1);
+  const frames = stack.split('\n').slice(1);
   const declarationFrame = frames.find((frame) => {
     return !(SOURCE_FRAME.test(frame) || BUILD_FRAME.test(frame));
   });
   if (!declarationFrame) {
     return;
   }
-  const declarationPath = declarationFrame.replace(/\s*at [^()]*\(([^)]+)\)/, "$1").replace(/^@/, "");
+  const declarationPath = declarationFrame
+    .replace(/\s*at [^()]*\(([^)]+)\)/, '$1')
+    .replace(/^@/, '');
   return declarationPath;
 }
 
@@ -412,7 +416,7 @@ function isIterable(fn) {
   if (!fn) {
     return false;
   }
-  return typeof fn[Symbol.iterator] == "function";
+  return typeof fn[Symbol.iterator] == 'function';
 }
 
 // node_modules/msw/lib/core/handlers/RequestHandler.mjs
@@ -433,7 +437,7 @@ var RequestHandler = class _RequestHandler {
     this.options = args.options;
     const callFrame = getCallFrame(new Error());
     this.info = __spreadProps(__spreadValues({}, args.info), {
-      callFrame
+      callFrame,
     });
     this.isUsed = false;
   }
@@ -457,12 +461,12 @@ var RequestHandler = class _RequestHandler {
     return __async(this, null, function* () {
       const parsedResult = yield this.parse({
         request: args.request,
-        resolutionContext: args.resolutionContext
+        resolutionContext: args.resolutionContext,
       });
       return this.predicate({
         request: args.request,
         parsedResult,
-        resolutionContext: args.resolutionContext
+        resolutionContext: args.resolutionContext,
       });
     });
   }
@@ -474,7 +478,7 @@ var RequestHandler = class _RequestHandler {
   // We only clone it once per request to avoid unnecessary overhead.
   cloneRequestOrGetFromCache(request) {
     const existingClone = _RequestHandler.cache.get(request);
-    if (typeof existingClone !== "undefined") {
+    if (typeof existingClone !== 'undefined') {
       return existingClone;
     }
     const clonedRequest = request.clone();
@@ -493,12 +497,12 @@ var RequestHandler = class _RequestHandler {
       const requestClone = this.cloneRequestOrGetFromCache(args.request);
       const parsedResult = yield this.parse({
         request: args.request,
-        resolutionContext: args.resolutionContext
+        resolutionContext: args.resolutionContext,
       });
       const shouldInterceptRequest = this.predicate({
         request: args.request,
         parsedResult,
-        resolutionContext: args.resolutionContext
+        resolutionContext: args.resolutionContext,
       });
       if (!shouldInterceptRequest) {
         return null;
@@ -510,12 +514,14 @@ var RequestHandler = class _RequestHandler {
       const executeResolver = this.wrapResolver(this.resolver);
       const resolverExtras = this.extendResolverArgs({
         request: args.request,
-        parsedResult
+        parsedResult,
       });
-      const mockedResponsePromise = executeResolver(__spreadProps(__spreadValues({}, resolverExtras), {
-        requestId: args.requestId,
-        request: args.request
-      })).catch((errorOrResponse) => {
+      const mockedResponsePromise = executeResolver(
+        __spreadProps(__spreadValues({}, resolverExtras), {
+          requestId: args.requestId,
+          request: args.request,
+        })
+      ).catch((errorOrResponse) => {
         if (errorOrResponse instanceof Response) {
           return errorOrResponse;
         }
@@ -528,38 +534,39 @@ var RequestHandler = class _RequestHandler {
         request: requestClone,
         requestId: args.requestId,
         response: mockedResponse,
-        parsedResult
+        parsedResult,
       });
       return executionResult;
     });
   }
   wrapResolver(resolver) {
-    return (info) => __async(this, null, function* () {
-      const result = this.resolverGenerator || (yield resolver(info));
-      if (isIterable(result)) {
-        this.isUsed = false;
-        const { value, done } = result[Symbol.iterator]().next();
-        const nextResponse = yield value;
-        if (done) {
-          this.isUsed = true;
+    return (info) =>
+      __async(this, null, function* () {
+        const result = this.resolverGenerator || (yield resolver(info));
+        if (isIterable(result)) {
+          this.isUsed = false;
+          const { value, done } = result[Symbol.iterator]().next();
+          const nextResponse = yield value;
+          if (done) {
+            this.isUsed = true;
+          }
+          if (!nextResponse && done) {
+            invariant(
+              this.resolverGeneratorResult,
+              'Failed to returned a previously stored generator response: the value is not a valid Response.'
+            );
+            return this.resolverGeneratorResult.clone();
+          }
+          if (!this.resolverGenerator) {
+            this.resolverGenerator = result;
+          }
+          if (nextResponse) {
+            this.resolverGeneratorResult = nextResponse?.clone();
+          }
+          return nextResponse;
         }
-        if (!nextResponse && done) {
-          invariant(
-            this.resolverGeneratorResult,
-            "Failed to returned a previously stored generator response: the value is not a valid Response."
-          );
-          return this.resolverGeneratorResult.clone();
-        }
-        if (!this.resolverGenerator) {
-          this.resolverGenerator = result;
-        }
-        if (nextResponse) {
-          this.resolverGeneratorResult = nextResponse?.clone();
-        }
-        return nextResponse;
-      }
-      return result;
-    });
+        return result;
+      });
   }
   createExecutionResult(args) {
     return {
@@ -567,62 +574,65 @@ var RequestHandler = class _RequestHandler {
       request: args.request,
       requestId: args.requestId,
       response: args.response,
-      parsedResult: args.parsedResult
+      parsedResult: args.parsedResult,
     };
   }
 };
 
 // node_modules/@open-draft/until/lib/index.mjs
-var until = (promise) => __async(void 0, null, function* () {
-  try {
-    const data = yield promise().catch((error2) => {
-      throw error2;
-    });
-    return { error: null, data };
-  } catch (error2) {
-    return { error: error2, data: null };
-  }
-});
+var until = (promise) =>
+  __async(void 0, null, function* () {
+    try {
+      const data = yield promise().catch((error2) => {
+        throw error2;
+      });
+      return { error: null, data };
+    } catch (error2) {
+      return { error: error2, data: null };
+    }
+  });
 
 // node_modules/msw/lib/core/utils/executeHandlers.mjs
-var executeHandlers = (_0) => __async(void 0, [_0], function* ({
-  request,
-  requestId,
-  handlers,
-  resolutionContext
-}) {
-  let matchingHandler = null;
-  let result = null;
-  for (const handler of handlers) {
-    result = yield handler.run({ request, requestId, resolutionContext });
-    if (result !== null) {
-      matchingHandler = handler;
+var executeHandlers = (_0) =>
+  __async(
+    void 0,
+    [_0],
+    function* ({ request, requestId, handlers, resolutionContext }) {
+      let matchingHandler = null;
+      let result = null;
+      for (const handler of handlers) {
+        result = yield handler.run({ request, requestId, resolutionContext });
+        if (result !== null) {
+          matchingHandler = handler;
+        }
+        if (result?.response) {
+          break;
+        }
+      }
+      if (matchingHandler) {
+        return {
+          handler: matchingHandler,
+          parsedResult: result?.parsedResult,
+          response: result?.response,
+        };
+      }
+      return null;
     }
-    if (result?.response) {
-      break;
-    }
-  }
-  if (matchingHandler) {
-    return {
-      handler: matchingHandler,
-      parsedResult: result?.parsedResult,
-      response: result?.response
-    };
-  }
-  return null;
-});
+  );
 
 // node_modules/msw/lib/core/utils/request/toPublicUrl.mjs
 function toPublicUrl(url) {
-  if (typeof location === "undefined") {
+  if (typeof location === 'undefined') {
     return url.toString();
   }
   const urlInstance = url instanceof URL ? url : new URL(url);
-  return urlInstance.origin === location.origin ? urlInstance.pathname : urlInstance.origin + urlInstance.pathname;
+  return urlInstance.origin === location.origin
+    ? urlInstance.pathname
+    : urlInstance.origin + urlInstance.pathname;
 }
 
 // node_modules/msw/lib/core/utils/request/onUnhandledRequest.mjs
-function onUnhandledRequest(request, strategy = "warn") {
+function onUnhandledRequest(request, strategy = 'warn') {
   return __async(this, null, function* () {
     const url = new URL(request.url);
     const publicUrl = toPublicUrl(url) + url.search;
@@ -634,19 +644,19 @@ If you still wish to intercept this unhandled request, please create a request h
 Read more: https://mswjs.io/docs/getting-started/mocks`;
     function applyStrategy(strategy2) {
       switch (strategy2) {
-        case "error": {
-          devUtils.error("Error: %s", unhandledRequestMessage);
+        case 'error': {
+          devUtils.error('Error: %s', unhandledRequestMessage);
           throw new InternalError(
             devUtils.formatMessage(
               'Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option.'
             )
           );
         }
-        case "warn": {
-          devUtils.warn("Warning: %s", unhandledRequestMessage);
+        case 'warn': {
+          devUtils.warn('Warning: %s', unhandledRequestMessage);
           break;
         }
-        case "bypass":
+        case 'bypass':
           break;
         default:
           throw new InternalError(
@@ -657,14 +667,14 @@ Read more: https://mswjs.io/docs/getting-started/mocks`;
           );
       }
     }
-    if (typeof strategy === "function") {
+    if (typeof strategy === 'function') {
       strategy(request, {
-        warning: applyStrategy.bind(null, "warn"),
-        error: applyStrategy.bind(null, "error")
+        warning: applyStrategy.bind(null, 'warn'),
+        error: applyStrategy.bind(null, 'error'),
       });
       return;
     }
-    if (url.protocol === "file:") {
+    if (url.protocol === 'file:') {
       return;
     }
     applyStrategy(strategy);
@@ -678,64 +688,81 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+var __commonJS = (cb, mod) =>
+  function __require() {
+    return (
+      mod ||
+        (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod),
+      mod.exports
+    );
+  };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+var __toESM = (mod, isNodeMode, target) => (
+  (target = mod != null ? __create(__getProtoOf(mod)) : {}),
+  __copyProps(
+    isNodeMode || !mod || !mod.__esModule
+      ? __defProp(target, 'default', { value: mod, enumerable: true })
+      : target,
+    mod
+  )
+);
 var require_set_cookie = __commonJS({
-  "node_modules/set-cookie-parser/lib/set-cookie.js"(exports, module) {
-    "use strict";
+  'node_modules/set-cookie-parser/lib/set-cookie.js'(exports, module) {
+    'use strict';
     var defaultParseOptions = {
       decodeValues: true,
       map: false,
-      silent: false
+      silent: false,
     };
     function isNonEmptyString(str) {
-      return typeof str === "string" && !!str.trim();
+      return typeof str === 'string' && !!str.trim();
     }
     function parseString(setCookieValue, options) {
-      var parts = setCookieValue.split(";").filter(isNonEmptyString);
+      var parts = setCookieValue.split(';').filter(isNonEmptyString);
       var nameValuePairStr = parts.shift();
       var parsed = parseNameValuePair(nameValuePairStr);
       var name = parsed.name;
       var value = parsed.value;
-      options = options ? Object.assign({}, defaultParseOptions, options) : defaultParseOptions;
+      options = options
+        ? Object.assign({}, defaultParseOptions, options)
+        : defaultParseOptions;
       try {
         value = options.decodeValues ? decodeURIComponent(value) : value;
       } catch (e) {
         console.error(
-          "set-cookie-parser encountered an error while decoding a cookie with value '" + value + "'. Set options.decodeValues to false to disable this feature.",
+          "set-cookie-parser encountered an error while decoding a cookie with value '" +
+            value +
+            "'. Set options.decodeValues to false to disable this feature.",
           e
         );
       }
       var cookie = {
         name,
-        value
+        value,
       };
-      parts.forEach(function(part) {
-        var sides = part.split("=");
+      parts.forEach(function (part) {
+        var sides = part.split('=');
         var key = sides.shift().trimLeft().toLowerCase();
-        var value2 = sides.join("=");
-        if (key === "expires") {
+        var value2 = sides.join('=');
+        if (key === 'expires') {
           cookie.expires = new Date(value2);
-        } else if (key === "max-age") {
+        } else if (key === 'max-age') {
           cookie.maxAge = parseInt(value2, 10);
-        } else if (key === "secure") {
+        } else if (key === 'secure') {
           cookie.secure = true;
-        } else if (key === "httponly") {
+        } else if (key === 'httponly') {
           cookie.httpOnly = true;
-        } else if (key === "samesite") {
+        } else if (key === 'samesite') {
           cookie.sameSite = value2;
         } else {
           cookie[key] = value2;
@@ -744,19 +771,21 @@ var require_set_cookie = __commonJS({
       return cookie;
     }
     function parseNameValuePair(nameValuePairStr) {
-      var name = "";
-      var value = "";
-      var nameValueArr = nameValuePairStr.split("=");
+      var name = '';
+      var value = '';
+      var nameValueArr = nameValuePairStr.split('=');
       if (nameValueArr.length > 1) {
         name = nameValueArr.shift();
-        value = nameValueArr.join("=");
+        value = nameValueArr.join('=');
       } else {
         value = nameValuePairStr;
       }
       return { name, value };
     }
     function parse(input, options) {
-      options = options ? Object.assign({}, defaultParseOptions, options) : defaultParseOptions;
+      options = options
+        ? Object.assign({}, defaultParseOptions, options)
+        : defaultParseOptions;
       if (!input) {
         if (!options.map) {
           return [];
@@ -765,17 +794,20 @@ var require_set_cookie = __commonJS({
         }
       }
       if (input.headers) {
-        if (typeof input.headers.getSetCookie === "function") {
+        if (typeof input.headers.getSetCookie === 'function') {
           input = input.headers.getSetCookie();
-        } else if (input.headers["set-cookie"]) {
-          input = input.headers["set-cookie"];
+        } else if (input.headers['set-cookie']) {
+          input = input.headers['set-cookie'];
         } else {
-          var sch = input.headers[Object.keys(input.headers).find(function(key) {
-            return key.toLowerCase() === "set-cookie";
-          })];
+          var sch =
+            input.headers[
+              Object.keys(input.headers).find(function (key) {
+                return key.toLowerCase() === 'set-cookie';
+              })
+            ];
           if (!sch && input.headers.cookie && !options.silent) {
             console.warn(
-              "Warning: set-cookie-parser appears to have been called on a request object. It is designed to parse Set-Cookie headers from responses, not Cookie headers from requests. Set the option {silent: true} to suppress this warning."
+              'Warning: set-cookie-parser appears to have been called on a request object. It is designed to parse Set-Cookie headers from responses, not Cookie headers from requests. Set the option {silent: true} to suppress this warning.'
             );
           }
           input = sch;
@@ -784,14 +816,16 @@ var require_set_cookie = __commonJS({
       if (!Array.isArray(input)) {
         input = [input];
       }
-      options = options ? Object.assign({}, defaultParseOptions, options) : defaultParseOptions;
+      options = options
+        ? Object.assign({}, defaultParseOptions, options)
+        : defaultParseOptions;
       if (!options.map) {
-        return input.filter(isNonEmptyString).map(function(str) {
+        return input.filter(isNonEmptyString).map(function (str) {
           return parseString(str, options);
         });
       } else {
         var cookies = {};
-        return input.filter(isNonEmptyString).reduce(function(cookies2, str) {
+        return input.filter(isNonEmptyString).reduce(function (cookies2, str) {
           var cookie = parseString(str, options);
           cookies2[cookie.name] = cookie;
           return cookies2;
@@ -802,7 +836,7 @@ var require_set_cookie = __commonJS({
       if (Array.isArray(cookiesString)) {
         return cookiesString;
       }
-      if (typeof cookiesString !== "string") {
+      if (typeof cookiesString !== 'string') {
         return [];
       }
       var cookiesStrings = [];
@@ -813,21 +847,24 @@ var require_set_cookie = __commonJS({
       var nextStart;
       var cookiesSeparatorFound;
       function skipWhitespace() {
-        while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) {
+        while (
+          pos < cookiesString.length &&
+          /\s/.test(cookiesString.charAt(pos))
+        ) {
           pos += 1;
         }
         return pos < cookiesString.length;
       }
       function notSpecialChar() {
         ch = cookiesString.charAt(pos);
-        return ch !== "=" && ch !== ";" && ch !== ",";
+        return ch !== '=' && ch !== ';' && ch !== ',';
       }
       while (pos < cookiesString.length) {
         start = pos;
         cookiesSeparatorFound = false;
         while (skipWhitespace()) {
           ch = cookiesString.charAt(pos);
-          if (ch === ",") {
+          if (ch === ',') {
             lastComma = pos;
             pos += 1;
             skipWhitespace();
@@ -835,7 +872,10 @@ var require_set_cookie = __commonJS({
             while (pos < cookiesString.length && notSpecialChar()) {
               pos += 1;
             }
-            if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
+            if (
+              pos < cookiesString.length &&
+              cookiesString.charAt(pos) === '='
+            ) {
               cookiesSeparatorFound = true;
               pos = nextStart;
               cookiesStrings.push(cookiesString.substring(start, lastComma));
@@ -848,7 +888,9 @@ var require_set_cookie = __commonJS({
           }
         }
         if (!cookiesSeparatorFound || pos >= cookiesString.length) {
-          cookiesStrings.push(cookiesString.substring(start, cookiesString.length));
+          cookiesStrings.push(
+            cookiesString.substring(start, cookiesString.length)
+          );
         }
       }
       return cookiesStrings;
@@ -857,17 +899,17 @@ var require_set_cookie = __commonJS({
     module.exports.parse = parse;
     module.exports.parseString = parseString;
     module.exports.splitCookiesString = splitCookiesString;
-  }
+  },
 });
 var import_set_cookie_parser = __toESM(require_set_cookie());
-var PERSISTENCY_KEY = "MSW_COOKIE_STORE";
+var PERSISTENCY_KEY = 'MSW_COOKIE_STORE';
 function supportsLocalStorage() {
   try {
     if (localStorage == null) {
       return false;
     }
-    const testKey = PERSISTENCY_KEY + "_test";
-    localStorage.setItem(testKey, "test");
+    const testKey = PERSISTENCY_KEY + '_test';
+    localStorage.setItem(testKey, 'test');
     localStorage.getItem(testKey);
     localStorage.removeItem(testKey);
     return true;
@@ -888,25 +930,32 @@ var CookieStore = class {
     this.store = /* @__PURE__ */ new Map();
   }
   add(request, response) {
-    if (isPropertyAccessible(request, "credentials") && request.credentials === "omit") {
+    if (
+      isPropertyAccessible(request, 'credentials') &&
+      request.credentials === 'omit'
+    ) {
       return;
     }
     const requestUrl = new URL(request.url);
-    const responseCookies = response.headers.get("set-cookie");
+    const responseCookies = response.headers.get('set-cookie');
     if (!responseCookies) {
       return;
     }
     const now = Date.now();
-    const parsedResponseCookies = (0, import_set_cookie_parser.parse)(responseCookies).map(
-      (_a) => {
-        var _b = _a, { maxAge } = _b, cookie = __objRest(_b, ["maxAge"]);
-        return __spreadProps(__spreadValues({}, cookie), {
-          expires: maxAge === void 0 ? cookie.expires : new Date(now + maxAge * 1e3),
-          maxAge
-        });
-      }
-    );
-    const prevCookies = this.store.get(requestUrl.origin) || /* @__PURE__ */ new Map();
+    const parsedResponseCookies = (0, import_set_cookie_parser.parse)(
+      responseCookies
+    ).map((_a) => {
+      var _b = _a,
+        { maxAge } = _b,
+        cookie = __objRest(_b, ['maxAge']);
+      return __spreadProps(__spreadValues({}, cookie), {
+        expires:
+          maxAge === void 0 ? cookie.expires : new Date(now + maxAge * 1e3),
+        maxAge,
+      });
+    });
+    const prevCookies =
+      this.store.get(requestUrl.origin) || /* @__PURE__ */ new Map();
     parsedResponseCookies.forEach((cookie) => {
       this.store.set(requestUrl.origin, prevCookies.set(cookie.name, cookie));
     });
@@ -914,22 +963,25 @@ var CookieStore = class {
   get(request) {
     this.deleteExpiredCookies();
     const requestUrl = new URL(request.url);
-    const originCookies = this.store.get(requestUrl.origin) || /* @__PURE__ */ new Map();
-    if (!isPropertyAccessible(request, "credentials")) {
+    const originCookies =
+      this.store.get(requestUrl.origin) || /* @__PURE__ */ new Map();
+    if (!isPropertyAccessible(request, 'credentials')) {
       return originCookies;
     }
     switch (request.credentials) {
-      case "include": {
-        if (typeof document === "undefined") {
+      case 'include': {
+        if (typeof document === 'undefined') {
           return originCookies;
         }
-        const documentCookies = (0, import_set_cookie_parser.parse)(document.cookie);
+        const documentCookies = (0, import_set_cookie_parser.parse)(
+          document.cookie
+        );
         documentCookies.forEach((cookie) => {
           originCookies.set(cookie.name, cookie);
         });
         return originCookies;
       }
-      case "same-origin": {
+      case 'same-origin': {
         return originCookies;
       }
       default:
@@ -962,10 +1014,17 @@ var CookieStore = class {
           origin,
           new Map(
             cookies.map((_a) => {
-              var [token, _b] = _a, _c = _b, { expires } = _c, cookie = __objRest(_c, ["expires"]);
+              var [token, _b] = _a,
+                _c = _b,
+                { expires } = _c,
+                cookie = __objRest(_c, ['expires']);
               return [
                 token,
-                expires === void 0 ? cookie : __spreadProps(__spreadValues({}, cookie), { expires: new Date(expires) })
+                expires === void 0
+                  ? cookie
+                  : __spreadProps(__spreadValues({}, cookie), {
+                      expires: new Date(expires),
+                    }),
               ];
             })
           )
@@ -1014,16 +1073,26 @@ var store = new CookieStore();
 
 // node_modules/msw/lib/core/utils/request/readResponseCookies.mjs
 function readResponseCookies(request, response) {
-  store.add(__spreadProps(__spreadValues({}, request), { url: request.url.toString() }), response);
+  store.add(
+    __spreadProps(__spreadValues({}, request), { url: request.url.toString() }),
+    response
+  );
   store.persist();
 }
 
 // node_modules/msw/lib/core/utils/handleRequest.mjs
-function handleRequest(request, requestId, handlers, options, emitter, handleRequestOptions) {
+function handleRequest(
+  request,
+  requestId,
+  handlers,
+  options,
+  emitter,
+  handleRequestOptions
+) {
   return __async(this, null, function* () {
-    emitter.emit("request:start", { request, requestId });
-    if (request.headers.get("x-msw-intention") === "bypass") {
-      emitter.emit("request:end", { request, requestId });
+    emitter.emit('request:start', { request, requestId });
+    if (request.headers.get('x-msw-intention') === 'bypass') {
+      emitter.emit('request:end', { request, requestId });
       handleRequestOptions?.onPassthroughResponse?.(request);
       return;
     }
@@ -1032,44 +1101,48 @@ function handleRequest(request, requestId, handlers, options, emitter, handleReq
         request,
         requestId,
         handlers,
-        resolutionContext: handleRequestOptions?.resolutionContext
+        resolutionContext: handleRequestOptions?.resolutionContext,
       });
     });
     if (lookupResult.error) {
-      emitter.emit("unhandledException", {
+      emitter.emit('unhandledException', {
         error: lookupResult.error,
         request,
-        requestId
+        requestId,
       });
       throw lookupResult.error;
     }
     if (!lookupResult.data) {
       yield onUnhandledRequest(request, options.onUnhandledRequest);
-      emitter.emit("request:unhandled", { request, requestId });
-      emitter.emit("request:end", { request, requestId });
+      emitter.emit('request:unhandled', { request, requestId });
+      emitter.emit('request:end', { request, requestId });
       handleRequestOptions?.onPassthroughResponse?.(request);
       return;
     }
     const { response } = lookupResult.data;
     if (!response) {
-      emitter.emit("request:end", { request, requestId });
+      emitter.emit('request:end', { request, requestId });
       handleRequestOptions?.onPassthroughResponse?.(request);
       return;
     }
-    if (response.status === 302 && response.headers.get("x-msw-intention") === "passthrough") {
-      emitter.emit("request:end", { request, requestId });
+    if (
+      response.status === 302 &&
+      response.headers.get('x-msw-intention') === 'passthrough'
+    ) {
+      emitter.emit('request:end', { request, requestId });
       handleRequestOptions?.onPassthroughResponse?.(request);
       return;
     }
     readResponseCookies(request, response);
-    emitter.emit("request:match", { request, requestId });
+    emitter.emit('request:match', { request, requestId });
     const requiredLookupResult = lookupResult.data;
-    const transformedResponse = handleRequestOptions?.transformResponse?.(response) || response;
+    const transformedResponse =
+      handleRequestOptions?.transformResponse?.(response) || response;
     handleRequestOptions?.onMockedResponse?.(
       transformedResponse,
       requiredLookupResult
     );
-    emitter.emit("request:end", { request, requestId });
+    emitter.emit('request:end', { request, requestId });
     return transformedResponse;
   });
 }
@@ -1082,6 +1155,6 @@ export {
   toPublicUrl,
   store,
   executeHandlers,
-  handleRequest
+  handleRequest,
 };
 //# sourceMappingURL=chunk-33HLCHI4.js.map

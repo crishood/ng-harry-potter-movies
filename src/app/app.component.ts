@@ -1,8 +1,8 @@
-import {Component, computed, inject, Signal} from '@angular/core';
-import {MovieItemComponent} from './movie-item/movie-item.component';
-import {Movie} from './model/movie.model';
-import {MoviesService} from './services/movies.service';
-import {HighlightDirective} from './highlight.directive';
+import { Component, computed, inject, Signal } from '@angular/core';
+import { MovieItemComponent } from './movie-item/movie-item.component';
+import { Movie } from './model/movie.model';
+import { MoviesService } from './services/movies.service';
+import { HighlightDirective } from './highlight.directive';
 import { FavoritesService } from './services/favorites.service';
 
 @Component({
@@ -10,9 +10,7 @@ import { FavoritesService } from './services/favorites.service';
   standalone: true,
 
   templateUrl: 'app.component.html',
-  imports: [
-    MovieItemComponent, HighlightDirective
-  ]
+  imports: [MovieItemComponent, HighlightDirective],
 })
 export class AppComponent {
   protected movies: Signal<Movie[]> = inject(MoviesService).getMovies();
@@ -24,6 +22,6 @@ export class AppComponent {
   }
 
   public isFavorite(movie: Movie): Signal<boolean> {
-    return  computed(() => !!(this._favorites().find((m) => m.id === movie.id)));
+    return computed(() => !!this._favorites().find((m) => m.id === movie.id));
   }
 }
